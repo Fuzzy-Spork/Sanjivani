@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:sanjivani/screens/screens.dart';
 
 void main() {
+  ErrorWidget.builder = (FlutterErrorDetails details) =>
+      Center(child: CircularProgressIndicator());
+
   runApp(MyApp());
 }
 

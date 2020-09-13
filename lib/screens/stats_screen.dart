@@ -2,7 +2,7 @@ import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:sanjivani/config/palette.dart';
 import 'package:sanjivani/config/styles.dart';
-import 'package:sanjivani/data/data.dart';
+import 'package:sanjivani/widgets/chart.dart';
 import 'package:sanjivani/widgets/widgets.dart';
 
 class StatsScreen extends StatefulWidget {
@@ -14,6 +14,8 @@ class _StatsScreenState extends State<StatsScreen> {
   String _country = 'USA';
   String _age = '0-9';
   String _gender = 'Female';
+  List list;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -35,7 +37,7 @@ class _StatsScreenState extends State<StatsScreen> {
             SliverPadding(
               padding: const EdgeInsets.only(top: 20.0),
               sliver: SliverToBoxAdapter(
-                child: CovidBarChart(covidCases: covidUSADailyNewCases),
+                child: LineGraph(),
               ),
             ),
           ],
@@ -74,27 +76,59 @@ class _StatsScreenState extends State<StatsScreen> {
     return SliverPadding(
       padding: const EdgeInsets.all(20.0),
       sliver: SliverToBoxAdapter(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            CountryDropdown(
-              countries: [
-                '0-9',
-                '10-19',
-                '20-29',
-                '30-39',
-                '40-49',
-                '50-59',
-                '60-69',
-                '70+'
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                CountryDropdown(
+                  countries: [
+                    '0-9',
+                    '10-19',
+                    '20-29',
+                    '30-39',
+                    '40-49',
+                    '50-59',
+                    '60-69',
+                    '70+'
+                  ],
+                  country: _age,
+                  onChanged: (val) => setState(() => _age = val),
+                ),
+                CountryDropdown(
+                  countries: ['Female', 'Male', 'NA'],
+                  country: _gender,
+                  onChanged: (val) => setState(() => _gender = val),
+                ),
               ],
-              country: _age,
-              onChanged: (val) => setState(() => _age = val),
             ),
-            CountryDropdown(
-              countries: ['Female', 'Male', 'NA'],
-              country: _gender,
-              onChanged: (val) => setState(() => _gender = val),
+            SizedBox(
+              height: 4,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    showDatePicker(
+                        context: context,
+                        initialDate: DateTime(2020),
+                        firstDate: DateTime(2020),
+                        lastDate: DateTime.now());
+                  },
+                  child: Text('start date'),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    showDatePicker(
+                        context: context,
+                        initialDate: DateTime(2020),
+                        firstDate: DateTime(2020),
+                        lastDate: DateTime.now());
+                  },
+                  child: Text('start date'),
+                ),
+              ],
             ),
           ],
         ),
