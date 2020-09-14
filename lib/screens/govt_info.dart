@@ -1,11 +1,91 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'dart:convert';
 
-class GovtInfoScreen extends StatelessWidget {
+import 'package:clipboard_manager/clipboard_manager.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'package:sanjivani/models/notifBlock.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class GovtInfoScreen extends StatefulWidget {
+  @override
+  _GovtInfoScreenState createState() => _GovtInfoScreenState();
+}
+
+class _GovtInfoScreenState extends State<GovtInfoScreen> {
+  Future getData() async {
+    final response =
+        await http.get('https://api.rootnet.in/covid19-in/notifications');
+    return jsonDecode(response.body);
+  }
+
+  var data;
+
+  @override
+  void initState() {
+    super.initState();
+    fetch();
+  }
+
+  fetch() async {
+    await getData().then((value) {
+      setState(() {
+        data = value;
+        data = data["data"]['notifications'];
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
+    getInfoWidgets() {
+      List<Widget> list = [];
+      List<NotifBlock> notifs = [];
+      for (int i = 0; i < data.length; i++) {
+        if (int.tryParse(data[i]['title'].toString()[1]) != null) {
+          notifs.add(NotifBlock(
+            name: (data[i]['title'])
+                .toString()
+                .substring(11, data[i]['title'].toString().length),
+            link: data[i]['link'],
+            date: DateTime.parse((data[i]['title'])
+                    .toString()
+                    .substring(0, 10)
+                    .substring(6, 10) +
+                (data[i]['title']).toString().substring(0, 10).substring(3, 5) +
+                (data[i]['title']).toString().substring(0, 10).substring(0, 2)),
+          ));
+          // list.add(InfoBlock(
+          //   name: (data[i]['title'])
+          //       .toString()
+          //       .substring(11, data[i]['title'].toString().length),
+          //   link: data[i]['link'],
+          //   size: size,
+          //   date: DateTime.parse((data[i]['title'])
+          //           .toString()
+          //           .substring(0, 10)
+          //           .substring(6, 10) +
+          //       (data[i]['title']).toString().substring(0, 10).substring(3, 5) +
+          //       (data[i]['title']).toString().substring(0, 10).substring(0, 2)),
+          // ));
+        }
+      }
+      notifs.sort((a, b) => b.date.compareTo(a.date));
+      for (var notif in notifs) {
+        list.add(InfoBlock(
+          size: size,
+          name: notif.name,
+          link: notif.link,
+          date: notif.date,
+        ));
+      }
+      return list;
+    }
+
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -14,55 +94,55 @@ class GovtInfoScreen extends StatelessWidget {
           decoration: BoxDecoration(
             color: Color(0xFFFFFFFF),
           ),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: size.width * 0.05, left: size.width * 0.05),
-                  child: Text(
-                    'Notification and Govt',
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: size.height * 0.04,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Padding(
+              padding: EdgeInsets.only(
+                  top: size.width * 0.05, left: size.width * 0.05),
+              child: Text(
+                'Notification and Govt',
+                style: TextStyle(
+                  color: Colors.black87,
+                  fontSize: size.height * 0.038,
+                  fontWeight: FontWeight.bold,
                 ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: size.width * 0.01, left: size.width * 0.05),
-                  child: Text(
-                    'Advisories',
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: size.height * 0.04,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: size.height * 0.01,
-                ),
-                SizedBox(
-                  height: 2,
-                  width: size.width * 0.5,
-                  child: Container(
-                    color: Color(0xFFff7e67),
-                  ),
-                ),
-                SizedBox(
-                  height: size.height * 0.01,
-                ),
-                InfoBlock(size: size),
-                InfoBlock(size: size),
-                InfoBlock(size: size),
-                InfoBlock(size: size),
-                InfoBlock(size: size),
-              ],
+              ),
             ),
-          ),
+            Padding(
+              padding: EdgeInsets.only(
+                  top: size.width * 0.01, left: size.width * 0.05),
+              child: Text(
+                'Advisories',
+                style: TextStyle(
+                  color: Colors.black87,
+                  fontSize: size.height * 0.04,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: size.height * 0.01,
+            ),
+            SizedBox(
+              height: 2,
+              width: size.width * 0.5,
+              child: Container(
+                color: Color(0xFFff7e67),
+              ),
+            ),
+            SizedBox(
+              height: size.height * 0.01,
+            ),
+            Expanded(
+              child: data == null
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : ListView(
+                      children: getInfoWidgets(),
+                    ),
+            ),
+          ]),
         ),
       ),
     );
@@ -70,15 +150,33 @@ class GovtInfoScreen extends StatelessWidget {
 }
 
 class InfoBlock extends StatelessWidget {
-  const InfoBlock({
+  final String link;
+  final String name;
+  final DateTime date;
+  InfoBlock({
+    this.date,
+    this.name,
+    this.link,
     Key key,
     @required this.size,
   }) : super(key: key);
 
   final Size size;
 
+  String formatDate(DateTime date) =>
+      new DateFormat("MMMM d, yyyy").format(date);
+
   @override
   Widget build(BuildContext context) {
+    _launchCaller(String link) async {
+      var url = "$link";
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'Could not launch $url';
+      }
+    }
+
     return Container(
       margin: const EdgeInsets.symmetric(
         vertical: 10.0,
@@ -99,7 +197,7 @@ class InfoBlock extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(right: 8),
                 child: Text(
-                  '12 Sept 2020',
+                  formatDate(date),
                   style: const TextStyle(
                     color: Color(0xFF006a71),
                     fontSize: 15.0,
@@ -112,15 +210,16 @@ class InfoBlock extends StatelessWidget {
           SizedBox(height: size.height * 0.01),
           Row(
             children: [
-              Text(
-                'Latest Advisory from Goverment 2020',
+              Expanded(
+                  child: Text(
+                name,
                 style: const TextStyle(
                   color: Colors.black87,
                   fontSize: 16.0,
                   fontWeight: FontWeight.w900,
                 ),
                 maxLines: 2,
-              ),
+              )),
             ],
           ),
           SizedBox(height: size.height * 0.01),
@@ -144,14 +243,28 @@ class InfoBlock extends StatelessWidget {
                         color: Color(0xFF006a71),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Copy',
-                        style: TextStyle(
-                          color: Color(0xFF006a71),
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
+                    GestureDetector(
+                      onTap: () async {
+                        ClipboardManager.copyToClipBoard(link).then((result) {
+                          final snackBar = SnackBar(
+                            content: Text('Copied to Clipboard'),
+                            action: SnackBarAction(
+                              label: 'Undo',
+                              onPressed: () {},
+                            ),
+                          );
+                          Scaffold.of(context).showSnackBar(snackBar);
+                        });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Copy',
+                          style: TextStyle(
+                            color: Color(0xFF006a71),
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -178,14 +291,19 @@ class InfoBlock extends StatelessWidget {
                         color: Color(0xFF006a71),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Open',
-                        style: TextStyle(
-                          color: Color(0xFF006a71),
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
+                    GestureDetector(
+                      onTap: () {
+                        _launchCaller(link);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Open',
+                          style: TextStyle(
+                            color: Color(0xFF006a71),
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
