@@ -43,7 +43,7 @@ class _StatsScreenState extends State<StatsScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Palette.primaryColor,
+        backgroundColor: Colors.white,
         body: CustomScrollView(
           physics: ClampingScrollPhysics(),
           slivers: <Widget>[
@@ -95,6 +95,8 @@ class _StatsScreenState extends State<StatsScreen> {
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
+          focusColor: Color(0xFFecf4f3),
+          dropdownColor: Color(0xFFecf4f3),
           value: PatientStats.statesEnumMap[_state],
           items: getStateItems(),
           onChanged: (selected) {
@@ -113,16 +115,23 @@ class _StatsScreenState extends State<StatsScreen> {
     return SliverPadding(
       padding: const EdgeInsets.all(20.0),
       sliver: SliverToBoxAdapter(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
           children: <Widget>[
-            Text(
-              'Statistics',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 25.0,
-                fontWeight: FontWeight.bold,
-              ),
+            Row(
+              children: [
+                Text(
+                  'Statistics',
+                  style: const TextStyle(
+                    color: Colors.black87,
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Spacer(),
+              ],
+            ),
+            SizedBox(
+              height: 20,
             ),
             getStateDropdown(),
           ],
@@ -176,7 +185,12 @@ class _StatsScreenState extends State<StatsScreen> {
                   child: Text('start date'),
                 ),
                 RaisedButton(
-                  child: Text('Change'),
+                  child: Text(
+                    'Change',
+                    style: TextStyle(
+                      color: Color(0xFF006a71),
+                    ),
+                  ),
                   onPressed: () {
                     setState(() {
                       print('Dates');
@@ -197,60 +211,6 @@ class _StatsScreenState extends State<StatsScreen> {
               ],
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  SliverToBoxAdapter _buildRegionTabBar() {
-    return SliverToBoxAdapter(
-      child: DefaultTabController(
-        length: 2,
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20.0),
-          height: 50.0,
-          decoration: BoxDecoration(
-            color: Colors.white24,
-            borderRadius: BorderRadius.circular(25.0),
-          ),
-          child: TabBar(
-            indicator: BubbleTabIndicator(
-              tabBarIndicatorSize: TabBarIndicatorSize.tab,
-              indicatorHeight: 40.0,
-              indicatorColor: Colors.white,
-            ),
-            labelStyle: Styles.tabTextStyle,
-            labelColor: Colors.black,
-            unselectedLabelColor: Colors.white,
-            tabs: <Widget>[
-              Text('My Country'),
-              Text('Global'),
-            ],
-            onTap: (index) {},
-          ),
-        ),
-      ),
-    );
-  }
-
-  SliverPadding _buildStatsTabBar() {
-    return SliverPadding(
-      padding: const EdgeInsets.all(20.0),
-      sliver: SliverToBoxAdapter(
-        child: DefaultTabController(
-          length: 3,
-          child: TabBar(
-            indicatorColor: Colors.transparent,
-            labelStyle: Styles.tabTextStyle,
-            labelColor: Colors.white,
-            unselectedLabelColor: Colors.white60,
-            tabs: <Widget>[
-              Text('Total'),
-              Text('Today'),
-              Text('Yesterday'),
-            ],
-            onTap: (index) {},
-          ),
         ),
       ),
     );

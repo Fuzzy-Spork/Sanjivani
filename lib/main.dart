@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sanjivani/screens/screens.dart';
+import 'screens/dashboard.dart';
 
 void main() {
   ErrorWidget.builder = (FlutterErrorDetails details) =>
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: BottomNavScreen(),
+      home: Dashboard(),
     );
   }
 }

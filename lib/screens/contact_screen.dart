@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class GovtInfoScreen extends StatelessWidget {
+class ContactScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -22,7 +21,7 @@ class GovtInfoScreen extends StatelessWidget {
                   padding: EdgeInsets.only(
                       top: size.width * 0.05, left: size.width * 0.05),
                   child: Text(
-                    'Notification and Govt',
+                    'Contact and',
                     style: TextStyle(
                       color: Colors.black87,
                       fontSize: size.height * 0.04,
@@ -34,7 +33,7 @@ class GovtInfoScreen extends StatelessWidget {
                   padding: EdgeInsets.only(
                       top: size.width * 0.01, left: size.width * 0.05),
                   child: Text(
-                    'Advisories',
+                    'Helpline',
                     style: TextStyle(
                       color: Colors.black87,
                       fontSize: size.height * 0.04,
@@ -55,11 +54,11 @@ class GovtInfoScreen extends StatelessWidget {
                 SizedBox(
                   height: size.height * 0.01,
                 ),
-                InfoBlock(size: size),
-                InfoBlock(size: size),
-                InfoBlock(size: size),
-                InfoBlock(size: size),
-                InfoBlock(size: size),
+                ContactBlock(size: size),
+                ContactBlock(size: size),
+                ContactBlock(size: size),
+                ContactBlock(size: size),
+                ContactBlock(size: size),
               ],
             ),
           ),
@@ -69,8 +68,8 @@ class GovtInfoScreen extends StatelessWidget {
   }
 }
 
-class InfoBlock extends StatelessWidget {
-  const InfoBlock({
+class ContactBlock extends StatelessWidget {
+  const ContactBlock({
     Key key,
     @required this.size,
   }) : super(key: key);
@@ -85,7 +84,7 @@ class InfoBlock extends StatelessWidget {
         horizontal: 20.0,
       ),
       padding: const EdgeInsets.all(10.0),
-      height: size.height * 0.22,
+      height: size.height * 0.14,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.0),
       ),
@@ -99,7 +98,7 @@ class InfoBlock extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(right: 8),
                 child: Text(
-                  '12 Sept 2020',
+                  'Uttar Pradesh',
                   style: const TextStyle(
                     color: Color(0xFF006a71),
                     fontSize: 15.0,
@@ -112,86 +111,22 @@ class InfoBlock extends StatelessWidget {
           SizedBox(height: size.height * 0.01),
           Row(
             children: [
+              Icon(
+                Icons.local_phone,
+                size: 20,
+                color: Colors.black87,
+              ),
+              SizedBox(
+                width: size.height * 0.01,
+              ),
               Text(
-                'Latest Advisory from Goverment 2020',
+                '7272028119',
                 style: const TextStyle(
                   color: Colors.black87,
-                  fontSize: 16.0,
+                  fontSize: 24.0,
                   fontWeight: FontWeight.w900,
                 ),
                 maxLines: 2,
-              ),
-            ],
-          ),
-          SizedBox(height: size.height * 0.01),
-          Row(
-            children: [
-              Container(
-                height: 40,
-                width: size.width * 0.33,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Color(0xFFecf4f3),
-                ),
-                child: Row(
-                  children: [
-                    Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        FontAwesomeIcons.copy,
-                        size: 22,
-                        color: Color(0xFF006a71),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Copy',
-                        style: TextStyle(
-                          color: Color(0xFF006a71),
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Spacer(),
-                  ],
-                ),
-              ),
-              Spacer(),
-              Container(
-                height: 40,
-                width: size.width * 0.33,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Color(0xFFecf4f3),
-                ),
-                child: Row(
-                  children: [
-                    Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        FontAwesomeIcons.externalLinkAlt,
-                        size: 21,
-                        color: Color(0xFF006a71),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Open',
-                        style: TextStyle(
-                          color: Color(0xFF006a71),
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Spacer()
-                  ],
-                ),
               ),
             ],
           ),

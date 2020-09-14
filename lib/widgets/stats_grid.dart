@@ -10,17 +10,17 @@ class StatsGrid extends StatelessWidget {
           Flexible(
             child: Row(
               children: <Widget>[
-                _buildStatCard('Total Cases', '1.81 M', Colors.orange),
-                _buildStatCard('Deaths', '105 K', Colors.red),
+                _buildStatCard('Total Cases', '1.81 M'),
+                _buildStatCard('Deaths', '105 K'),
               ],
             ),
           ),
           Flexible(
             child: Row(
               children: <Widget>[
-                _buildStatCard('Recovered', '391 K', Colors.green),
-                _buildStatCard('Active', '1.31 M', Colors.lightBlue),
-                _buildStatCard('Critical', 'N/A', Colors.purple),
+                _buildStatCard('Recovered', '391 K'),
+                _buildStatCard('Active', '1.31 M'),
+                _buildStatCard('Critical', 'N/A'),
               ],
             ),
           ),
@@ -29,13 +29,13 @@ class StatsGrid extends StatelessWidget {
     );
   }
 
-  Expanded _buildStatCard(String title, String count, MaterialColor color) {
+  Expanded _buildStatCard(String title, String count) {
     return Expanded(
       child: Container(
         margin: const EdgeInsets.all(8.0),
         padding: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
-          color: color,
+          color: Color(0xFFff7e67),
           borderRadius: BorderRadius.circular(10.0),
         ),
         child: Column(
