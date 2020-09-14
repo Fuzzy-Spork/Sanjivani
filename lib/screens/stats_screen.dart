@@ -1,10 +1,9 @@
-import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:sanjivani/config/palette.dart';
-import 'package:sanjivani/config/styles.dart';
 import 'package:sanjivani/models/patient_stats.dart';
 import 'package:sanjivani/widgets/chart.dart';
-import 'package:sanjivani/widgets/widgets.dart';
+
+import '../widgets/country_dropdown.dart';
+import '../widgets/stats_grid.dart';
 
 class StatsScreen extends StatefulWidget {
   @override

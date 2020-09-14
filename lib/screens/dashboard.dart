@@ -1,13 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sanjivani/data/data.dart';
 import 'package:sanjivani/screens/contact_screen.dart';
 import 'package:sanjivani/screens/covid.dart';
 import 'package:sanjivani/screens/govt_info.dart';
-import 'package:sanjivani/screens/screens.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:sanjivani/data/data.dart';
+
 import 'hospital_screen.dart';
 import 'medical_college_screen.dart';
+import 'stats_screen.dart';
 
 class Dashboard extends StatefulWidget {
   @override

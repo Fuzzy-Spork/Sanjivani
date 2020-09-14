@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sanjivani/screens/screens.dart';
+
 import 'screens/dashboard.dart';
 
 void main() {

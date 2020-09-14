@@ -65,7 +65,6 @@ class _LineGraphState extends State<LineGraph> {
                     }
                   } else {
                     if (widget.age == '20-29') {
-                      print('YESSSSS\n\n\n\n\n\n');
                       if (patient.ageEstimate >= 20 &&
                           patient.ageEstimate <= 29) {
                         if (dateNumbers.containsKey(patient.reportedOn)) {
@@ -203,16 +202,16 @@ class _LineGraphState extends State<LineGraph> {
                 ),
                 Expanded(
                   child: SizedBox(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.8,
                     child: line1 == null
                         ? Text('No Data')
-                        : AnimatedLineChart(
-                      lineChart,
-                      key: UniqueKey(),
-                    ),
+                        : line1.values.length == 1
+                            ? Text(
+                                'Only one point found, not enough data to plot with the given parameters.')
+                            : AnimatedLineChart(
+                                lineChart,
+                                key: UniqueKey(),
+                              ),
                   ),
                 ),
                 SizedBox(width: 200, height: 50, child: Text('')),
