@@ -59,19 +59,6 @@ class _GovtInfoScreenState extends State<GovtInfoScreen> {
                 (data[i]['title']).toString().substring(0, 10).substring(3, 5) +
                 (data[i]['title']).toString().substring(0, 10).substring(0, 2)),
           ));
-          // list.add(InfoBlock(
-          //   name: (data[i]['title'])
-          //       .toString()
-          //       .substring(11, data[i]['title'].toString().length),
-          //   link: data[i]['link'],
-          //   size: size,
-          //   date: DateTime.parse((data[i]['title'])
-          //           .toString()
-          //           .substring(0, 10)
-          //           .substring(6, 10) +
-          //       (data[i]['title']).toString().substring(0, 10).substring(3, 5) +
-          //       (data[i]['title']).toString().substring(0, 10).substring(0, 2)),
-          // ));
         }
       }
       notifs.sort((a, b) => b.date.compareTo(a.date));
