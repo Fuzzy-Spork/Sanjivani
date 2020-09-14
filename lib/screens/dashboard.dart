@@ -6,6 +6,8 @@ import 'package:sanjivani/screens/screens.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sanjivani/data/data.dart';
+import 'hospital_screen.dart';
+import 'medical_college_screen.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -150,15 +152,14 @@ class _DashboardState extends State<Dashboard> {
                   child: Row(
                     children: [
                       GestureDetector(
-//                        onTap: () {
-//                          setState(() {
-//                            Navigator.push(
-//                                context,
-//                                MaterialPageRoute(
-//                                    builder: (context) =>
-//                                        FacultySearchScreen()));
-//                          });
-//                        },
+                        onTap: () {
+                          setState(() {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HospitalScreen()));
+                          });
+                        },
                         child: Container(
                           height: 50,
                           width: size.width * 0.4,
@@ -285,6 +286,68 @@ class _DashboardState extends State<Dashboard> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => StatsScreen()));
+                                });
+                              },
+                              child: Container(
+                                  height: size.height * 0.08,
+                                  width: size.height * 0.08,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Color(0xFFDF565E).withOpacity(0.8),
+                                  ),
+                                  child: Icon(
+                                    Icons.arrow_forward,
+                                  )),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Spacer(),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: size.height * 0.05),
+                  child: Row(
+                    children: [
+                      Spacer(),
+                      Container(
+                        height: size.height * 0.12,
+                        width: size.width * 0.9,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Color(0xFFff7e67),
+                        ),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(18),
+                              child: Container(
+                                width: size.width * 0.6,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Medical Colleges',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 23,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              MedicalCollegeScreen()));
                                 });
                               },
                               child: Container(
