@@ -2,6 +2,7 @@ import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:sanjivani/config/palette.dart';
 import 'package:sanjivani/config/styles.dart';
+import 'package:sanjivani/models/patient_stats.dart';
 import 'package:sanjivani/widgets/chart.dart';
 import 'package:sanjivani/widgets/widgets.dart';
 
@@ -11,10 +12,32 @@ class StatsScreen extends StatefulWidget {
 }
 
 class _StatsScreenState extends State<StatsScreen> {
-  String _country = 'USA';
-  String _age = '0-9';
-  String _gender = 'Female';
+  States _state = States.India;
+  String _age = 'All Ages';
+  String _gender = 'All Genders';
   List list;
+  DateTime startDate = DateTime(2020);
+  DateTime endDate = DateTime.now();
+
+  _selectStartDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: startDate, // Refer step 1
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null && picked != startDate) startDate = picked;
+  }
+
+  _selectEndDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: endDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null && picked != endDate) endDate = picked;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,15 +55,55 @@ class _StatsScreenState extends State<StatsScreen> {
               ),
             ),
             _buildHeader1(),
-//            _buildRegionTabBar(),
-//            _buildStatsTabBar(),
             SliverPadding(
               padding: const EdgeInsets.only(top: 20.0),
               sliver: SliverToBoxAdapter(
-                child: LineGraph(),
+                child: LineGraph(
+                  start: startDate,
+                  end: endDate,
+                  state: _state,
+                  age: _age,
+                  gender: _gender,
+                ),
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  List getStateItems() {
+    List<DropdownMenuItem<String>> items = [];
+    for (var state in States.values) {
+      items.add(DropdownMenuItem(
+        child: Text(PatientStats.statesEnumMap[state]),
+        value: PatientStats.statesEnumMap[state],
+      ));
+    }
+    return items;
+  }
+
+  Widget getStateDropdown() {
+    print(getStateItems());
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      height: 40.0,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(30.0),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: PatientStats.statesEnumMap[_state],
+          items: getStateItems(),
+          onChanged: (selected) {
+            setState(() {
+              _state = (PatientStats.statesEnumMap.keys
+                      .where((k) => PatientStats.statesEnumMap[k] == selected))
+                  .first;
+            });
+          },
         ),
       ),
     );
@@ -61,11 +124,7 @@ class _StatsScreenState extends State<StatsScreen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            CountryDropdown(
-              countries: ['CN', 'FR', 'IN', 'IT', 'UK', 'USA'],
-              country: _country,
-              onChanged: (val) => setState(() => _country = val),
-            ),
+            getStateDropdown(),
           ],
         ),
       ),
@@ -83,6 +142,7 @@ class _StatsScreenState extends State<StatsScreen> {
               children: <Widget>[
                 CountryDropdown(
                   countries: [
+                    'All Ages',
                     '0-9',
                     '10-19',
                     '20-29',
@@ -96,7 +156,7 @@ class _StatsScreenState extends State<StatsScreen> {
                   onChanged: (val) => setState(() => _age = val),
                 ),
                 CountryDropdown(
-                  countries: ['Female', 'Male', 'NA'],
+                  countries: ['All Genders', 'Female', 'Male'],
                   country: _gender,
                   onChanged: (val) => setState(() => _gender = val),
                 ),
@@ -110,23 +170,29 @@ class _StatsScreenState extends State<StatsScreen> {
               children: <Widget>[
                 GestureDetector(
                   onTap: () {
-                    showDatePicker(
-                        context: context,
-                        initialDate: DateTime(2020),
-                        firstDate: DateTime(2020),
-                        lastDate: DateTime.now());
+                    _selectStartDate(context);
+                    print('jggjgjgj$startDate');
                   },
                   child: Text('start date'),
                 ),
+                RaisedButton(
+                  child: Text('Change'),
+                  onPressed: () {
+                    setState(() {
+                      print('Dates');
+                      print(startDate.toIso8601String() +
+                          '\n' +
+                          endDate.toIso8601String() +
+                          '\nDatesENDDDDd');
+                    });
+                  },
+                ),
                 GestureDetector(
                   onTap: () {
-                    showDatePicker(
-                        context: context,
-                        initialDate: DateTime(2020),
-                        firstDate: DateTime(2020),
-                        lastDate: DateTime.now());
+                    _selectEndDate(context);
+                    print(endDate);
                   },
-                  child: Text('start date'),
+                  child: Text('end date'),
                 ),
               ],
             ),
