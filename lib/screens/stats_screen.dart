@@ -181,7 +181,7 @@ class _StatsScreenState extends State<StatsScreen> {
                     _selectStartDate(context);
                     print('jggjgjgj$startDate');
                   },
-                  child: Text('start date'),
+                  child: Text('Select Start Date'),
                 ),
                 RaisedButton(
                   child: Text(
@@ -191,13 +191,7 @@ class _StatsScreenState extends State<StatsScreen> {
                     ),
                   ),
                   onPressed: () {
-                    setState(() {
-                      print('Dates');
-                      print(startDate.toIso8601String() +
-                          '\n' +
-                          endDate.toIso8601String() +
-                          '\nDatesENDDDDd');
-                    });
+                    setState(() {});
                   },
                 ),
                 GestureDetector(
@@ -205,7 +199,7 @@ class _StatsScreenState extends State<StatsScreen> {
                     _selectEndDate(context);
                     print(endDate);
                   },
-                  child: Text('end date'),
+                  child: Text('Select End Date'),
                 ),
               ],
             ),

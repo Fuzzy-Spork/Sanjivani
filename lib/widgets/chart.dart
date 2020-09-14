@@ -1,9 +1,19 @@
+import 'dart:io' as io;
+
+import 'package:ext_storage/ext_storage.dart';
 import 'package:fl_animated_linechart/chart/animated_line_chart.dart';
 import 'package:fl_animated_linechart/chart/area_line_chart.dart';
 import 'package:fl_animated_linechart/common/pair.dart';
 import 'package:fl_animated_linechart/fl_animated_linechart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sanjivani/models/patient_stats.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LineGraph extends StatefulWidget {
   DateTime start;
@@ -127,11 +137,7 @@ class _LineGraphState extends State<LineGraph> {
         }
       }
     }
-    setState(() {
-      dateNumbers.forEach((key, value) {
-        print('$key : $value');
-      });
-    });
+    setState(() {});
     return dateNumbers;
   }
 
@@ -157,6 +163,7 @@ class _LineGraphState extends State<LineGraph> {
     }
   }
 
+  final doc = pw.Document();
   update() {
     getData().then((value) {
       line1 = getLine();
@@ -167,6 +174,18 @@ class _LineGraphState extends State<LineGraph> {
     list = await PatientStats.listFromJson();
   }
 
+  _launchURL(String toMailId, String subject, String body) async {
+    var url = 'mailto:$toMailId?subject=$subject&body=$body';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  String email = '';
+  ScreenshotController screenshotController = ScreenshotController();
+  io.File _imageFile;
   @override
   Widget build(BuildContext context) {
     LineChart lineChart;
@@ -175,6 +194,7 @@ class _LineGraphState extends State<LineGraph> {
         [line1], [Colors.red.shade900], ['C'],
         gradients: [Pair(Colors.yellow.shade400, Colors.red.shade700)],
         tapTextFontWeight: FontWeight.w900);
+    TextEditingController _controller = TextEditingController();
 
     return Container(
       height: 375.0,
@@ -189,16 +209,101 @@ class _LineGraphState extends State<LineGraph> {
           ? Center(child: Text('No Deceased People in the given parameters'))
           : Column(
               children: [
-                Container(
-                  padding: const EdgeInsets.all(20.0),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Deceased',
-                    style: const TextStyle(
-                      fontSize: 22.0,
-                      fontWeight: FontWeight.bold,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(20.0),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Deceased',
+                        style: const TextStyle(
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                  ),
+                    RaisedButton(
+                      child: Text('Print'),
+                      onPressed: () async {
+                        if (await Permission.storage.request().isGranted) {
+                          // Either the permission was already granted before or the user just granted it.
+                          screenshotController
+                              .capture(pixelRatio: 1.5)
+                              .then((io.File image) async {
+                            //Capture Done
+                            setState(() {
+                              _imageFile = image;
+                            });
+                            doc.addPage(
+                              pw.Page(
+                                build: (pw.Context context) => pw.Center(
+                                  child: pw.Image(PdfImage.file(doc.document,
+                                      bytes: _imageFile.readAsBytesSync())),
+                                ),
+                              ),
+                            );
+                            String path = await ExtStorage
+                                .getExternalStoragePublicDirectory(
+                                    ExtStorage.DIRECTORY_DOWNLOADS);
+                            // final output = await Environment
+                            //     .getExternalStoragePublicDirectory(
+                            //         Environment.DIRECTORY_DOWNLOADS);
+                            final file = io.File("$path/graph.pdf");
+                            await file.writeAsBytes(doc.save());
+                          }).catchError((onError) {
+                            print(onError);
+                          });
+                        }
+                      },
+                    ),
+                    RaisedButton(
+                      child: Text('Mail'),
+                      onPressed: () async {
+                        String path =
+                            await ExtStorage.getExternalStoragePublicDirectory(
+                                ExtStorage.DIRECTORY_DOWNLOADS);
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            _controller.text = email;
+                            return AlertDialog(
+                              title: new Text("Enter Email ID"),
+                              content: TextField(
+                                controller: _controller,
+                                textInputAction: TextInputAction.newline,
+                                maxLines: null,
+                                keyboardType: TextInputType.multiline,
+                                onChanged: (value) {
+                                  email = value;
+                                },
+                              ),
+                              actions: <Widget>[
+                                // usually buttons at the bottom of the dialog
+                                new FlatButton(
+                                  child: new Text("Okay"),
+                                  onPressed: () async {
+                                    final Email email2 = Email(
+                                      body: 'This is the graph you requested.',
+                                      subject: 'Your Graph',
+                                      recipients: [email],
+                                      attachmentPaths: [path + '/graph.pdf'],
+                                      isHTML: false,
+                                    );
+
+                                    await FlutterEmailSender.send(email2);
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                        final output = await getTemporaryDirectory();
+                        final file = io.File("${output.path}/graph.pdf");
+                      },
+                    ),
+                  ],
                 ),
                 Expanded(
                   child: SizedBox(
@@ -208,9 +313,12 @@ class _LineGraphState extends State<LineGraph> {
                         : line1.values.length == 1
                             ? Text(
                                 'Only one point found, not enough data to plot with the given parameters.')
-                            : AnimatedLineChart(
-                                lineChart,
-                                key: UniqueKey(),
+                            : Screenshot(
+                                controller: screenshotController,
+                                child: AnimatedLineChart(
+                                  lineChart,
+                                  key: UniqueKey(),
+                                ),
                               ),
                   ),
                 ),

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:clipboard_manager/clipboard_manager.dart';
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -232,7 +232,7 @@ class InfoBlock extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        ClipboardManager.copyToClipBoard(link).then((result) {
+                        FlutterClipboard.copy(link).then((value) {
                           final snackBar = SnackBar(
                             content: Text('Copied to Clipboard'),
                             action: SnackBarAction(

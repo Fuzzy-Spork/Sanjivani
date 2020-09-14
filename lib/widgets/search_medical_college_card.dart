@@ -8,10 +8,10 @@ class SearchMedicalCollegeCard extends StatefulWidget {
       @required this.admissionCapacity,
       @required this.hospitalBeds,
       @required this.instituteName,
-      @required this.type});
+      @required this.ownership});
   final String stateName;
   final String city;
-  final String type;
+  final String ownership;
   final String admissionCapacity;
   final String hospitalBeds;
   final String instituteName;
@@ -43,10 +43,38 @@ class _SearchMedicalCollegeCardState extends State<SearchMedicalCollegeCard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Spacer(),
+                      Container(
+                        width: size.width * 0.8,
+                        child: Text(
+                          widget.instituteName,
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            color: Color(0xFF006a71),
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
                       Text(
-                        'Arunanchal Pradesh',
+                        'Hospital Beds',
                         style: TextStyle(
                           color: Color(0xFF006a71),
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        widget.hospitalBeds,
+                        style: TextStyle(
+                          color: Color(0xFFff7e67),
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
                         ),
@@ -57,7 +85,7 @@ class _SearchMedicalCollegeCardState extends State<SearchMedicalCollegeCard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Rural Hospitals',
+                        'Name',
                         style: TextStyle(
                           color: Color(0xFF006a71),
                           fontSize: 17,
@@ -78,7 +106,7 @@ class _SearchMedicalCollegeCardState extends State<SearchMedicalCollegeCard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Rural Beds',
+                        'Admission Capacity',
                         style: TextStyle(
                           color: Color(0xFF006a71),
                           fontSize: 17,
@@ -86,7 +114,7 @@ class _SearchMedicalCollegeCardState extends State<SearchMedicalCollegeCard> {
                         ),
                       ),
                       Text(
-                        '12302',
+                        widget.admissionCapacity,
                         style: TextStyle(
                           color: Color(0xFFff7e67),
                           fontSize: 17,
@@ -99,7 +127,7 @@ class _SearchMedicalCollegeCardState extends State<SearchMedicalCollegeCard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Urban Hospitals',
+                        'City',
                         style: TextStyle(
                           color: Color(0xFF006a71),
                           fontSize: 17,
@@ -107,7 +135,7 @@ class _SearchMedicalCollegeCardState extends State<SearchMedicalCollegeCard> {
                         ),
                       ),
                       Text(
-                        '12302',
+                        widget.city,
                         style: TextStyle(
                           color: Color(0xFFff7e67),
                           fontSize: 17,
@@ -120,7 +148,7 @@ class _SearchMedicalCollegeCardState extends State<SearchMedicalCollegeCard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Urban Beds',
+                        'Ownership',
                         style: TextStyle(
                           color: Color(0xFF006a71),
                           fontSize: 17,
@@ -128,7 +156,7 @@ class _SearchMedicalCollegeCardState extends State<SearchMedicalCollegeCard> {
                         ),
                       ),
                       Text(
-                        '12302',
+                        widget.ownership,
                         style: TextStyle(
                           color: Color(0xFFff7e67),
                           fontSize: 17,
@@ -141,7 +169,7 @@ class _SearchMedicalCollegeCardState extends State<SearchMedicalCollegeCard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Total Hospitals',
+                        'State',
                         style: TextStyle(
                           color: Color(0xFF006a71),
                           fontSize: 17,
@@ -149,28 +177,7 @@ class _SearchMedicalCollegeCardState extends State<SearchMedicalCollegeCard> {
                         ),
                       ),
                       Text(
-                        '12302',
-                        style: TextStyle(
-                          color: Color(0xFFff7e67),
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Total Beds',
-                        style: TextStyle(
-                          color: Color(0xFF006a71),
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        '12302',
+                        widget.stateName,
                         style: TextStyle(
                           color: Color(0xFFff7e67),
                           fontSize: 17,

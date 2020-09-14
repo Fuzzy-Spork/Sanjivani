@@ -1,16 +1,10 @@
 # sanjivani
 
-A new Flutter application.
+Sehej and Manish's submission for the Flipr Hackathon 6.0.
+## Description
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+As stated in the problem statement, our app does the following:
+1. Brings you live updates and statistics about the ongoing pandemic.
+2. Plots a Line Graph on those statistics(You can also change the parameters, namely State, Gender, AgeRange, and Date).
+3. The graph plotted and the stats shown are from the mock data provided to us in the problem statement.
+4. It also shows you the Contact Helplines, number of beds in various Hospitals and Information about Medical Colleges(As asked in the problem statement).
